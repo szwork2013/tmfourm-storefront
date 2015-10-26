@@ -2,7 +2,7 @@ import R from 'ramda'
 
 import {
   CREATE_ORDER,
-} from '../actions/order'
+} from '../actions/orders'
 
 export function orders(state = [], action) {
   let {type, order} = action

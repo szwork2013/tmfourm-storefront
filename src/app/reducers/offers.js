@@ -4,7 +4,7 @@ import lorem from 'lorem-ipsum'
 
 import {
   VIEW_OFFER,
-} from '../actions/offer'
+} from '../actions/offers'
 
 let initOffers = R.compose(
   R.map(idx => ({

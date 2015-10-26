@@ -5,8 +5,9 @@ import {connect} from 'react-redux'
 import {grid, container} from '../styles'
 import OfferFilter from '../components/offer-filter'
 import OfferList from '../components/offer-list'
-import {viewOffer} from '../actions/offer'
-import {oneClickBuy} from '../actions/order'
+import {fetchCategories} from '../actions/categories'
+import {viewOffer} from '../actions/offers'
+import {oneClickBuy} from '../actions/orders'
 import {addToShoppingcart} from '../actions/shoppingcart'
 
 @connect(state => {
@@ -43,34 +44,9 @@ export default class OffersPage extends Component {
       </div>
     )
   }
+
+  componentWillMount() {
+    let {dispatch} = this.props
+    dispatch(fetchCategories())
+  }
 }
-
-let offers = [
-  {
-    _id: '111111111111',
-    name: 'iphone 6g',
-  },
-]
-
-let categories = [
-  {
-    _id: '222222222222',
-    name: 'Smart Phone',
-  },
-  {
-    _id: '3333333333333',
-    name: 'Smart Phone',
-  },
-  {
-    _id: '444444444444444',
-    name: 'Smart Phone',
-  },
-  {
-    _id: '555555555555555',
-    name: 'Smart Phone',
-  },
-  {
-    _id: '66666666666666',
-    name: 'Smart Phone',
-  },
-]

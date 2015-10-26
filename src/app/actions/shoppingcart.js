@@ -1,7 +1,7 @@
 import uuid from 'uuid'
 import R from 'ramda'
 
-import {createOrder} from './order'
+import {createOrder} from './orders'
 
 export const ADD_TO_SHOPPINGCART = 'ADD_TO_SHOPPINGCART'
 export function addToShoppingcart(offer) {

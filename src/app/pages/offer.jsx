@@ -5,8 +5,8 @@ import {
 import R from 'ramda'
 import {connect} from 'react-redux'
 
-import {fetchOffer} from '../actions/offer'
-import {createOrder} from '../actions/order'
+import {fetchOffer} from '../actions/offers'
+import {createOrder} from '../actions/orders'
 import {addToShoppingcart} from '../actions/shoppingcart'
 import OfferDetail from '../components/offer-detail'
 
