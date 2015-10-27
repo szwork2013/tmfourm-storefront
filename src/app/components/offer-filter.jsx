@@ -1,8 +1,7 @@
 import {Component} from 'react'
 import {
-  List,
-  ListItem,
-  Checkbox,
+  RadioButtonGroup,
+  RadioButton,
   TextField,
 } from 'material-ui'
 import R from 'ramda'
@@ -10,26 +9,28 @@ import R from 'ramda'
 export default class OfferFilter extends Component {
 
   render() {
-    let {offers} = this.props
-    let {categories} = this.props
+    let {offers, categories, selectedCategory, onCategoryChange} = this.props
     let renderCategoryFilter = ({_id, name}) => (
-      <ListItem
+      <RadioButton
         key={_id}
-        primaryText={name}
-        leftCheckbox={
-          <Checkbox
-            value={_id}
-            onCheck={this.handleCategoryFilterChange}/>
-        }/>
+        value={_id}
+        label={name}/>
     )
     return (
-      <List>
-        <ListItem>
-          <TextField hintText="Enter Offer Name" floatingLabelText="Offer Name"/>
-        </ListItem>
-        <ListItem primaryText="Filter By Category"/>
-        {R.map(renderCategoryFilter, categories)}
-      </List>
+      <div>
+        <div>
+          <TextField hintText="Enter Offer Name" floatingLabelText="Filter by offer name"/>
+        </div>
+        <div><p>Filter by category</p></div>
+        <div>
+          <RadioButtonGroup
+            name="categoryFilters"
+            defaultSelected={selectedCategory || ''}
+            onChange={onCategoryChange}>
+            {R.map(renderCategoryFilter, categories)}
+          </RadioButtonGroup>
+        </div>
+      </div>
     )
   }
 }

@@ -75,10 +75,15 @@ let url = (q) => {
           ([name, op, value]) => `${name} ${op} '${value}'`,
           _.map(toString)
         )(queryField)
+        let notNilNorEmpty = _.both(
+          _.complement(_.isNil),
+          _.complement(_.isEmpty)
+        )
+        let getValue = _.nth(2)
         return 'q=' + _.compose(
           _.join(' and '),
           _.map(toQueryString),
-          _.filter(qi => !_.isEmpty(_.nth(2, qi)))
+          _.filter(qi => notNilNorEmpty(getValue(qi)))
         )(q.query)
       },
     ],

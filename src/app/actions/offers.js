@@ -19,7 +19,7 @@ export function fetchOffers(name, category, options) {
         path: '/product-offering',
         query: [
           ['name', LIKE, name],
-          ['category.name', EQ, category],
+          ['category._id', EQ, category],
         ],
         endpoint,
         options,

@@ -14,6 +14,7 @@ import {
 
 export function offers(state = {
   data: [],
+  filters: {},
 }, action) {
   let {type, status, filters, options, data, message} = action
   if (type === FETCH_OFFERS) {

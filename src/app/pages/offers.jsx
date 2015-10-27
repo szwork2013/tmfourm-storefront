@@ -19,7 +19,7 @@ import {addToShoppingcart} from '../actions/shoppingcart'
 export default class OffersPage extends Component {
 
   render() {
-    let {offers, categories, dispatch, history} = this.props
+    let {offers, categories, dispatch, history, filters, options, message} = this.props
     let handleViewOffer = offer => {
       dispatch(viewOffer(offer))
       history.pushState(null, '/offers/detail')
@@ -31,10 +31,17 @@ export default class OffersPage extends Component {
     let handleAddToCart = offer => {
       dispatch(addToShoppingcart(offer))
     }
+    let handleCategoryChange = (evt, selected) => {
+      let {name} = filters
+      dispatch(fetchOffers(name, selected))
+    }
     return (
       <div style={[grid.grid, grid.gridGutters]}>
         <div style={[grid.cell, grid.cellGutters, grid.u1of5]}>
-          <OfferFilter categories={categories}/>
+          <OfferFilter
+            categories={categories}
+            selectedCategory={filters.category}
+            onCategoryChange={handleCategoryChange}/>
         </div>
         <div style={[grid.cell, grid.cellGutters, grid.cellFit]}>
           <OfferList offers={offers}
@@ -47,8 +54,9 @@ export default class OffersPage extends Component {
   }
 
   componentWillMount() {
-    let {dispatch} = this.props
+    let {dispatch, filters, options} = this.props
+    let {name, category} = filters
     dispatch(fetchCategories())
-    dispatch(fetchOffers('Smart Phone', 'Smart Phone'))
+    dispatch(fetchOffers(name, category, options))
   }
 }
