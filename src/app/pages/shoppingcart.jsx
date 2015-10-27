@@ -5,9 +5,11 @@ import {
   ListItem,
 } from 'material-ui'
 import R from 'ramda'
+import Radium from 'radium'
 
 import Shoppingcart from '../components/shoppingcart'
-import {submitShoppingcart} from '../actions/shoppingcart'
+import {submitShoppingcart, resetShoppingcart} from '../actions/shoppingcart'
+import {grid, gridGutters, gridCenter, cell, cellCenter} from '../styles'
 
 @connect(state => {
   return {shoppingcart: state.shoppingcart}
@@ -20,15 +22,30 @@ export default class ShoppingcartPage extends Component {
       dispatch(submitShoppingcart())
       history.pushState(null, '/orders')
     }
+    let ok = R.both(
+      R.complement(R.isNil),
+      R.complement(R.isEmpty)
+    )
     return (
       <div>
-        {R.isEmpty(shoppingcart.items) &&
-          <h1>Shoppingcart is empty!!!</h1>
-        }
-        {!R.isEmpty(shoppingcart.items) &&
-          <Shoppingcart shoppingcart={shoppingcart} onSubmit={handleSubmit}/>
+        {
+          R.cond([
+            [R.compose(ok, R.props('items')), () => (
+              <Shoppingcart shoppingcart={shoppingcart} onSubmit={handleSubmit}/>
+            )],
+            [R.T, () => (
+              <div>
+                <img src="/images/empty-cart.gif"/>
+              </div>
+            )],
+          ])(shoppingcart)
         }
       </div>
     )
+  }
+
+  componentWillMount() {
+    let {shoppingcart, dispatch} = this.props
+    if (R.isNil(shoppingcart._id)) dispatch(resetShoppingcart())
   }
 }

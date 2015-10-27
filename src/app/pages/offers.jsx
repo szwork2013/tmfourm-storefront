@@ -35,13 +35,19 @@ export default class OffersPage extends Component {
       let {name} = filters
       dispatch(fetchOffers(name, selected))
     }
+    let handleOfferNameChange = evt => {
+      let {category} = filters
+      let name = evt.target.value
+      dispatch(fetchOffers(name, category))
+    }
     return (
       <div style={[grid.grid, grid.gridGutters]}>
         <div style={[grid.cell, grid.cellGutters, grid.u1of5]}>
           <OfferFilter
             categories={categories}
             selectedCategory={filters.category}
-            onCategoryChange={handleCategoryChange}/>
+            onCategoryChange={handleCategoryChange}
+            onOfferNameChange={handleOfferNameChange}/>
         </div>
         <div style={[grid.cell, grid.cellGutters, grid.cellFit]}>
           <OfferList offers={offers}

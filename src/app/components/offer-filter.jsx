@@ -9,25 +9,32 @@ import R from 'ramda'
 export default class OfferFilter extends Component {
 
   render() {
-    let {offers, categories, selectedCategory, onCategoryChange} = this.props
+    let {
+      offers,
+      categories,
+      selectedCategory,
+      onCategoryChange,
+      onOfferNameChange,
+    } = this.props
     let renderCategoryFilter = ({_id, name}) => (
-      <RadioButton
-        key={_id}
-        value={_id}
-        label={name}/>
+      <RadioButton key={_id} value={_id} label={name}/>
     )
     return (
       <div>
         <div>
-          <TextField hintText="Enter Offer Name" floatingLabelText="Filter by offer name"/>
+          <TextField
+            hintText="Enter offering name"
+            floatingLabelText="Filter offerings by name"
+            onChange={onOfferNameChange}/>
         </div>
-        <div><p>Filter by category</p></div>
+        <div><p>Filter offerings by category</p></div>
         <div>
           <RadioButtonGroup
             name="categoryFilters"
             defaultSelected={selectedCategory || ''}
             onChange={onCategoryChange}>
-            {R.map(renderCategoryFilter, categories)}
+              <RadioButton value="" label="All offerings"/>
+                {R.map(renderCategoryFilter, categories)}
           </RadioButtonGroup>
         </div>
       </div>
