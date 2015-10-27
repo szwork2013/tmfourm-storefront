@@ -7,7 +7,7 @@ export const POST = Symbol('post')
 export const PUT = Symbol('put')
 export const DELETE = Symbol('delete')
 export const HEAD = Symbol('head')
-
+export const [EQ, LIKE, IN, GT, LT, GE, LE] = ['eq', 'like', 'in', 'gt', 'lt', 'ge', 'le']
 export const [REQUEST, SUCCESS, FAILURE] = ['REQUEST', 'SUCCESS', 'FAILURE']
 export default config => store => next => action => {
   let q = action[Q]
@@ -70,14 +70,15 @@ let url = (q) => {
           _.isArrayLike,
           _.join(',')
         )(item)
-        let toQueryString = queryField => _.compoe(
+        let toQueryString = queryField => _.compose(
           _.trim,
-          _.join(' '),
+          ([name, op, value]) => `${name} ${op} '${value}'`,
           _.map(toString)
         )(queryField)
-        return _.compose(
+        return 'q=' + _.compose(
           _.join(' and '),
-          _.map(toQueryString)
+          _.map(toQueryString),
+          _.filter(qi => !_.isEmpty(_.nth(2, qi)))
         )(q.query)
       },
     ],
@@ -105,6 +106,7 @@ let Get = async function(q) {
   return await fetch(url(q), {
     method: 'get',
     headers: {
+      'Cache-Control': 'no-cache',
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
@@ -115,6 +117,7 @@ let Post = async function(q) {
   return await fetch(url(q), {
     method: 'post',
     headers: {
+      'Cache-Control': 'no-cache',
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },

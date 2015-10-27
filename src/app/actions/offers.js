@@ -1,16 +1,41 @@
-import lorem from 'lorem-ipsum'
-import uuid from 'uuid'
-let l = count => lorem({count})
+import {
+  Q,
+  GET,
+  POST,
+  EQ,
+  LIKE,
+} from '../middlewares/query-processor'
+import config from '../config'
 
-export const VIEW_OFFER = 'VIEW_OFFER'
-export function viewOffer(offer) {
+let {endpoint} = config.catlog
+
+export const FETCH_OFFERS = 'FETCH_OFFERS'
+export function fetchOffers(name, category, options) {
   return {
-    type: 'VIEW_OFFER',
-    offer,
-  }
+      type: FETCH_OFFERS,
+      filters: {name, category},
+      options,
+      [Q]: {
+        path: '/product-offering',
+        query: [
+          ['name', LIKE, name],
+          ['category.name', EQ, category],
+        ],
+        endpoint,
+        options,
+      },
+    }
 }
-export function fetchOffer(id) {
-  return dispatch => {
-    // TODO
+
+export const FETCH_OFFER = 'FETCH_OFFER'
+export function fetchOffer(_id, options) {
+  return {
+    type: FETCH_OFFER,
+    [Q]: {
+      path: '/product-offering/:_id',
+      params: {_id},
+      endpoint,
+      options,
+    },
   }
 }

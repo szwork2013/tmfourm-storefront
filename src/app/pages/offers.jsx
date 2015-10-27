@@ -6,13 +6,14 @@ import {grid, container} from '../styles'
 import OfferFilter from '../components/offer-filter'
 import OfferList from '../components/offer-list'
 import {fetchCategories} from '../actions/categories'
-import {viewOffer} from '../actions/offers'
+import {fetchOffers, fetchOffer, viewOffer} from '../actions/offers'
 import {oneClickBuy} from '../actions/orders'
 import {addToShoppingcart} from '../actions/shoppingcart'
 
 @connect(state => {
   let {offers, categories} = state
-  return {offers, categories}
+  let {data, filters, options, message} = offers
+  return {offers: data, filters, options, message, categories}
 })
 @Radium
 export default class OffersPage extends Component {
@@ -21,7 +22,7 @@ export default class OffersPage extends Component {
     let {offers, categories, dispatch, history} = this.props
     let handleViewOffer = offer => {
       dispatch(viewOffer(offer))
-      history.pushState(null, `/offers/${offer._id}`)
+      history.pushState(null, '/offers/detail')
     }
     let handleOrder = offer => {
       dispatch(oneClickBuy(offer))
@@ -48,5 +49,6 @@ export default class OffersPage extends Component {
   componentWillMount() {
     let {dispatch} = this.props
     dispatch(fetchCategories())
+    dispatch(fetchOffers('Smart Phone', 'Smart Phone'))
   }
 }

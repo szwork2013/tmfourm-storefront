@@ -22,7 +22,7 @@ let AppRoutes = (
     <Route path="home" component={Home}/>
     <Route path="offers" component={Module}>
       <IndexRoute component={OffersPage}/>
-      <Route path=":id" component={OfferPage}/>
+      <Route path="detail" component={OfferPage}/>
     </Route>
     <Route path="shoppingcart" component={ShoppingcartPage}/>
     <Route path="orders" component={OrdersPage}/>

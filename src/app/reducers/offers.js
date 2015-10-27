@@ -1,30 +1,32 @@
 import R from 'ramda'
-import uuid from 'uuid'
-import lorem from 'lorem-ipsum'
+import combineReducers from 'redux'
 
 import {
+  RESET_FILTERS,
+  FETCH_OFFERS,
   VIEW_OFFER,
 } from '../actions/offers'
+import {
+  REQUEST,
+  SUCCESS,
+  FAILURE,
+} from '../middlewares/query-processor'
 
-let initOffers = R.compose(
-  R.map(idx => ({
-    _id: uuid(),
-    name: `Smart phone - ${idx}`,
-    description: lorem({count: 36}),
-    attachments: R.compose(
-      R.map(idx => ({
-        _id: uuid(),
-        name: lorem({count: 1}),
-        description: lorem({count: 36}),
-      })),
-      R.range(1)
-    )(4),
-  })),
-  R.range(1)
-)(50)
-
-export function offers(state = initOffers, action) {
-  return state
+export function offers(state = {
+  data: [],
+}, action) {
+  let {type, status, filters, options, data, message} = action
+  if (type === FETCH_OFFERS) {
+    switch (action.status) {
+      case REQUEST:
+        return R.merge(state, {filters, options})
+      case SUCCESS:
+        return R.merge(state, {filters, options, data})
+      case FAILURE:
+        return state
+      default: return R.merge(state, {filters, options, message})
+    }
+  } else return state
 }
 
 export function offer(state = null, action) {
