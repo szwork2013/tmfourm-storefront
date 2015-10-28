@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 
 import {fetchOffer} from '../actions/offers'
 import {createOrder} from '../actions/orders'
-import {addToShoppingcart} from '../actions/shoppingcart'
+import {addToShoppingcart, loadShoppingcart} from '../actions/shoppingcart'
 import OfferDetail from '../components/offer-detail'
 
 @connect(state => {
@@ -34,6 +34,7 @@ export default class OfferPage extends Component {
     let {dispatch} = this.props
     let {id} = this.props.params
     dispatch(fetchOffer(id))
+    dispatch(loadShoppingcart())
   }
 }
 

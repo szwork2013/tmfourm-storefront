@@ -6,6 +6,7 @@ import {
 } from 'material-ui'
 import Radium from 'radium'
 import R from 'ramda'
+import {connect} from 'react-redux'
 
 import themes from '../themes'
 import {container} from '../styles'
@@ -14,15 +15,21 @@ import Header from '../components/header'
 let {ThemeManager, ThemeDecorator, Spacing} = Styles
 let {desktopKeylineIncrement} = Spacing
 
+@connect(state => {
+  let {shoppingcart} = state
+  return {shoppingcart}
+})
 @ThemeDecorator(ThemeManager.getMuiTheme(themes))
 @Radium
 export default class Main extends Component {
   render() {
-    let {route, history} = this.props
+    let {route, history, shoppingcart} = this.props
     return (
       <div style={container}>
         <div style={styles.header}>
-          <Header menu={menu(history)} onMenuChange={this.handleMenuChange}/>
+          <Header
+            menu={menu(history, shoppingcart)}
+            onMenuChange={this.handleMenuChange}/>
         </div>
         <div style={[styles.content]}>
           {this.props.children}
@@ -36,12 +43,14 @@ export default class Main extends Component {
   }
 }
 
-let menu = history => {
+let menu = (history, shoppingcart) => {
+  let items = shoppingcart.items || []
+  let count = items.length || ''
   let menu = {
     home: {route: '/home', label: "Storefront", icon: "/images/storefront.jpg"},
     items: [
       {route: '/offers', label: "Product Offerings"},
-      {route: '/shoppingcart', label: "Shoppingcart"},
+      {route: '/shoppingcart', label: "Shoppingcart " + count},
       {route: '/orders', label: "Product Orders"},
     ],
   }

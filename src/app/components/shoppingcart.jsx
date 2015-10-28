@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import {
+  Paper,
   RaisedButton,
 } from 'material-ui'
 import R from 'ramda'
@@ -17,16 +18,20 @@ export default class Shoppingcart extends Component {
         <RaisedButton label="Submit" primary={true}
           onClick={onSubmit.bind(this, shoppingcart)}/>
         {
-          R.map(item => (
-            <div key={item._id} style={[grid.grid, grid.gridGutters]}>
-              <div style={[grid.cell, grid.cellGutters, grid.u1of8, grid.cellCenter]}>
-                <img src={"//place-hold.it/200&text=" + item.offer.name} style={{width: '100%'}}/>
+          R.map(({_id, productOffering}) => (
+            <Paper key={_id} style={{marginTop: 36}} zDepth={3}>
+              <div style={[grid.grid, grid.gridGutters]}>
+                <div style={[grid.cell, grid.cellGutters, grid.u1of8, grid.cellCenter]}>
+                  <img
+                    src={"//place-hold.it/200/CDDC39/fff&fontsize=24&text=" + productOffering.name}
+                    style={{width: 120}}/>
+                </div>
+                <div style={[grid.cell, grid.cellGutters]}>
+                  <h3>{productOffering.name}</h3>
+                  <p>{productOffering.description}</p>
+                </div>
               </div>
-              <div style={[grid.cell, grid.cellGutters]}>
-                <h3>{item.offer.name}</h3>
-                <p>{item.offer.description}</p>
-              </div>
-            </div>
+            </Paper>
           ), shoppingcart.items)
         }
       </div>

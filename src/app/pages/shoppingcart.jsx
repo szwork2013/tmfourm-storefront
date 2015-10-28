@@ -8,7 +8,7 @@ import R from 'ramda'
 import Radium from 'radium'
 
 import Shoppingcart from '../components/shoppingcart'
-import {submitShoppingcart, resetShoppingcart} from '../actions/shoppingcart'
+import {submitShoppingcart, loadShoppingcart} from '../actions/shoppingcart'
 import {grid, gridGutters, gridCenter, cell, cellCenter} from '../styles'
 
 @connect(state => {
@@ -22,22 +22,24 @@ export default class ShoppingcartPage extends Component {
       dispatch(submitShoppingcart())
       history.pushState(null, '/orders')
     }
-    let ok = R.both(
-      R.complement(R.isNil),
-      R.complement(R.isEmpty)
+    let notNil = R.complement(R.isNil)
+    let notEmpty = R.complement(R.isEmpty)
+    let hasItems = R.compose(R.both(notNil, notEmpty), R.prop('items'))
+    let isInitialized = R.both(notNil, hasItems)
+    let renderShoppingcart = sc => <Shoppingcart
+      shoppingcart={sc}
+      onSubmit={handleSubmit}/>
+    let renderEmptyShoppingcart = () => (
+      <div>
+        <img src="/images/empty-cart.gif"/>
+      </div>
     )
     return (
       <div>
         {
           R.cond([
-            [R.compose(ok, R.props('items')), () => (
-              <Shoppingcart shoppingcart={shoppingcart} onSubmit={handleSubmit}/>
-            )],
-            [R.T, () => (
-              <div>
-                <img src="/images/empty-cart.gif"/>
-              </div>
-            )],
+            [isInitialized, renderShoppingcart],
+            [R.T, renderEmptyShoppingcart],
           ])(shoppingcart)
         }
       </div>
@@ -46,6 +48,6 @@ export default class ShoppingcartPage extends Component {
 
   componentWillMount() {
     let {shoppingcart, dispatch} = this.props
-    if (R.isNil(shoppingcart._id)) dispatch(resetShoppingcart())
+    dispatch(loadShoppingcart())
   }
 }

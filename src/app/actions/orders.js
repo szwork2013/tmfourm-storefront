@@ -1,34 +1,36 @@
-import uuid from 'uuid'
 import R from 'ramda'
 
-export const CREATE_ORDER = 'CREATE_ORDER'
-export function createOrder(shoppingcart) {
-  let order = {
-    _id: uuid(),
-    name: '',
-    description: '',
-    items: R.map(item => ({
-      _id: uuid(),
-      offer: item.offer,
-    }), shoppingcart.items),
-  }
+import {
+  Q,
+  POST,
+} from '../middlewares/query-processor'
+import config from '../config'
+
+let {endpoint} = config.catlog
+
+export const FETCH_ORDERS = 'FETCH_ORDERS'
+export function fetchOrders(options) {
   return {
-    type: CREATE_ORDER,
-    order,
+    type: FETCH_ORDERS,
+    [Q]: {
+      path: '/product-order',
+      endpoint,
+      options,
+    },
   }
 }
-
-export function oneClickBuy(offer) {
-  return dispatch => {
-    let shoppingcart = {
-      _id: uuid(),
-      items: [
-        {
-          _id: uuid(),
-          offer: offer,
-        },
-      ],
-    }
-    dispatch(createOrder(shoppingcart))
-  }
+export const CREATE_ORDER = 'CREATE_ORDER'
+export function oneClickBuy(productOffering) {
+  return dispatch => dispatch({
+    type: CREATE_ORDER,
+    [Q]: {
+      method: POST,
+      path: '/product-order',
+      payload: {
+        items: [{productOffering}],
+      },
+      endpoint,
+      onSuccess: data => dispatch(fetchOrders()),
+    },
+  })
 }

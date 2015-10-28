@@ -8,7 +8,7 @@ import OfferList from '../components/offer-list'
 import {fetchCategories} from '../actions/categories'
 import {fetchOffers, fetchOffer, viewOffer} from '../actions/offers'
 import {oneClickBuy} from '../actions/orders'
-import {addToShoppingcart} from '../actions/shoppingcart'
+import {addToShoppingcart, loadShoppingcart} from '../actions/shoppingcart'
 
 @connect(state => {
   let {offers, categories} = state
@@ -64,5 +64,6 @@ export default class OffersPage extends Component {
     let {name, category} = filters
     dispatch(fetchCategories())
     dispatch(fetchOffers(name, category, options))
+    dispatch(loadShoppingcart())
   }
 }

@@ -7,6 +7,7 @@ import {
 import R from 'ramda'
 
 import OrderList from '../components/order-list'
+import {fetchOrders} from '../actions/orders'
 
 @connect(state => {
   return {orders: state.orders}
@@ -24,5 +25,10 @@ export default class OrdersPage extends Component {
         }
       </div>
     )
+  }
+
+  componentWillMount() {
+    let {dispatch} = this.props
+    dispatch(fetchOrders())
   }
 }

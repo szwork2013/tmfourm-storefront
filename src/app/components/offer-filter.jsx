@@ -3,6 +3,7 @@ import {
   RadioButtonGroup,
   RadioButton,
   TextField,
+  Paper,
 } from 'material-ui'
 import R from 'ramda'
 
@@ -21,14 +22,14 @@ export default class OfferFilter extends Component {
     )
     return (
       <div>
-        <div>
+        <Paper style={{padding: 10}} zDepth={3}>
           <TextField
             hintText="Enter offering name"
             floatingLabelText="Filter offerings by name"
             onChange={onOfferNameChange}/>
-        </div>
-        <div><p>Filter offerings by category</p></div>
-        <div>
+        </Paper>
+        <Paper style={{padding: 10}} zDepth={3}>
+          <p>Filter offerings by category</p>
           <RadioButtonGroup
             name="categoryFilters"
             defaultSelected={selectedCategory || ''}
@@ -36,7 +37,7 @@ export default class OfferFilter extends Component {
               <RadioButton value="" label="All offerings"/>
                 {R.map(renderCategoryFilter, categories)}
           </RadioButtonGroup>
-        </div>
+        </Paper>
       </div>
     )
   }

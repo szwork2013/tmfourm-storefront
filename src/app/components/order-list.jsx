@@ -44,13 +44,13 @@ export default class OrderList extends Component {
               <div style={[grid.grid]}>
                 <div style={[grid.cell]}>
                   {
-                    R.map(item => (
-                      <div key={item._id} style={[grid.grid]}>
+                    R.map(({_id, productOffering}) => (
+                      <div key={_id} style={[grid.grid]}>
                         <div style={[grid.cell, grid.cellCenter, grid.u1of12]}>
-                          <Avatar src={"//place-hold.it/200/CDDC39/fff&fontsize=24&text=" + item.offer.name} />
+                          <Avatar src={"//place-hold.it/200/CDDC39/fff&fontsize=24&text=" + productOffering.name} />
                         </div>
                         <div style={[grid.cell, grid.cellCenter]}>
-                          <p>{item.offer.name}</p>
+                          <p>{productOffering.name}</p>
                         </div>
                         <div style={[grid.cell, grid.cellCenter]}>
                           <p>{"x1"}</p>

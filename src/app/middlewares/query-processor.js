@@ -1,6 +1,8 @@
 import _ from 'ramda'
 import fetch from 'isomorphic-fetch'
 
+import storage from '../storage'
+
 export const Q = Symbol('query')
 export const GET = Symbol('get')
 export const POST = Symbol('post')
@@ -15,7 +17,11 @@ export default config => store => next => action => {
   else {
     let _action = _.merge(action, {}) //clone aciton without symbol
     let processQuery = query => query
-      .then(data => next(success(_.merge(_action, {data}))))
+      .then(data => {
+        if (!_.isNil(q.cache)) storage.set(q.cache, data)
+        if (!_.isNil(q.onSuccess)) q.onSuccess(data)
+        next(success(_.merge(_action, {data})))
+      })
       .catch(error => next(failure({message: error.message || error})))
     next(request(_action))
     let method = q.method || GET
