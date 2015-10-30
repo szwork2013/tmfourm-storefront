@@ -63,7 +63,7 @@ let menuItems = [
         primary1Color: Colors.brown500,
         primary2Color: Colors.brown700,
         primary3Color: Colors.lightBlack,
-        accent1Color: Colors.pinkA200,
+        accent1Color: Colors.deepPurpleA200,
         accent2Color: Colors.grey100,
         accent3Color: Colors.grey500,
         textColor: Colors.darkBlack,
