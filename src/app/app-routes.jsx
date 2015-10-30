@@ -7,6 +7,7 @@ import OffersPage from './pages/offers'
 import OfferPage from './pages/offer'
 import ShoppingcartPage from './pages/shoppingcart'
 import OrdersPage from './pages/orders'
+import ThemesPage from './pages/themes'
 
 let Home = props => (
   <div>Home</div>
@@ -26,6 +27,7 @@ let AppRoutes = (
     </Route>
     <Route path="shoppingcart" component={ShoppingcartPage}/>
     <Route path="orders" component={OrdersPage}/>
+    <Route path="themes" component={ThemesPage}/>
     <Route path="*" component={Notfound}/>
   </Route>
 )

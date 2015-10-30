@@ -4,5 +4,6 @@ import {offers, offer} from './offers'
 import {orders} from './orders'
 import {shoppingcart} from './shoppingcart'
 import {categories} from './categories'
+import {theme} from './themes'
 
-export default combineReducers({categories, offers, offer, orders, shoppingcart})
+export default combineReducers({categories, offers, offer, orders, shoppingcart, theme})

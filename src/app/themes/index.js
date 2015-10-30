@@ -1,8 +1,9 @@
+import R from 'ramda'
 import {Styles, Utils} from 'material-ui'
 
 let {Colors, Spacing} = Styles
 let {ColorManipulator} = Utils
-export default {
+export default config => R.merge({
   spacing: Spacing,
   fontFamily: 'Roboto, sans-serif',
   palette: {
@@ -18,4 +19,4 @@ export default {
     borderColor: Colors.grey300,
     disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3),
   },
-}
+}, config || {})

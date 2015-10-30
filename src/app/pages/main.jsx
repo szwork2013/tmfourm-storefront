@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import {Component, PropTypes} from 'react'
 import {
   Styles,
   AppBar,
@@ -11,19 +11,22 @@ import {connect} from 'react-redux'
 import themes from '../themes'
 import {container} from '../styles'
 import Header from '../components/header'
+import {changeTheme} from '../actions/themes'
 
 let {ThemeManager, ThemeDecorator, Spacing} = Styles
 let {desktopKeylineIncrement} = Spacing
 
 @connect(state => {
-  let {shoppingcart} = state
-  return {shoppingcart}
+  let {shoppingcart, theme} = state
+  return {shoppingcart, theme}
 })
-@ThemeDecorator(ThemeManager.getMuiTheme(themes))
-@Radium
 export default class Main extends Component {
+  static childContextTypes = {
+    muiTheme: PropTypes.object,
+  }
+
   render() {
-    let {route, history, shoppingcart} = this.props
+    let {route, history, shoppingcart, theme} = this.props
     return (
       <div style={container}>
         <div style={styles.header}>
@@ -31,11 +34,23 @@ export default class Main extends Component {
             menu={menu(history, shoppingcart)}
             onMenuChange={this.handleMenuChange}/>
         </div>
-        <div style={[styles.content]}>
+        <div style={styles.content}>
           {this.props.children}
         </div>
       </div>
     )
+  }
+
+  getChildContext() {
+    let {theme} = this.props
+    return {
+      muiTheme: ThemeManager.getMuiTheme(themes(theme)),
+    }
+  }
+
+  handleThemeChange = (evt, idx, themeItem) => {
+    let {dispatch} = this.props
+    dispatch(changeTheme(themeItem.payload))
   }
 
   handleMenuChange = pathname => {
@@ -52,6 +67,7 @@ let menu = (history, shoppingcart) => {
       {route: '/offers', label: "Product Offerings"},
       {route: '/shoppingcart', label: "Shoppingcart " + count},
       {route: '/orders', label: "Product Orders"},
+      {route: '/themes', label: "Personalize Theme"},
     ],
   }
   let activeItem = R.find(item => history.isActive(item.route), menu.items)
