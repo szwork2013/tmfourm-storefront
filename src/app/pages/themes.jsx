@@ -1,3 +1,4 @@
+import R from 'ramda'
 import {Component} from 'react'
 import {
   Paper,
@@ -6,73 +7,86 @@ import {
   Styles,
   Utils,
 } from 'material-ui'
+import Radium from 'radium'
 import {connect} from 'react-redux'
 
-import themes from '../themes'
-import {changeTheme} from '../actions/themes'
+import {applyTheme} from '../actions/themes'
+import {grid} from '../styles'
 
 let {Colors, Spacing} = Styles
 let {ColorManipulator} = Utils
+
 @connect(state => {
-  let {theme} = state
-  return {theme}
+  let {theme, themes} = state
+  return {theme, themes}
 })
 export default class ThemesPage extends Component {
 
   render() {
+    let {themes, theme} = this.props
     return (
       <div>
-        <p> Change theme </p>
-        <SelectField
-          onChange={this.handleThemeChange}
-          menuItems={menuItems}/>
+        <ThemeApplier onApplyTheme={this.handleApplyTheme} themes={themes}/>
+        <ThemeCreator onCreateTheme={this.handleCreateTheme}/>
       </div>
     )
   }
 
-  handleThemeChange = (evt, idx, theme) => {
+  handleCreateTheme = theme => {
+
+  }
+
+  handleApplyTheme = themeName => {
     let {dispatch} = this.props
-    let muiTheme = theme.payload
-    dispatch(changeTheme(muiTheme))
-    this.setState({muiTheme})
+    dispatch(applyTheme(themeName))
   }
 }
 
+@Radium
+class ThemeApplier extends Component {
+
+  render() {
+    let {themes} = this.props
+    let menuItems = R.compose(
+      R.map(key => ({text: key})),
+      R.keys
+    )
+
+    return (
+      <div style={[grid.grid]}>
+        <div style={[grid.cell, grid.u1of6]}>
+          <p> Choose a Theme to Apply... </p>
+        </div>
+        <div style={[grid.cell, grid.u1of6]}>
+          <SelectField
+            onChange={this.handleSelectChange}
+            menuItems={menuItems(themes)}/>
+        </div>
+      </div>
+    )
+  }
+
+  handleSelectChange = (evt, idx, item) => {
+    let {onApplyTheme} = this.props
+    onApplyTheme(item.text)
+  }
+}
+
+@Radium
+class ThemeCreator extends Component {
+
+  render() {
+
+    return (
+      <div>
+      </div>
+    )
+  }
+}
+
+
+
 let menuItems = [
-  {
-    payload: themes({
-      palette: {
-        primary1Color: Colors.cyan500,
-        primary2Color: Colors.cyan700,
-        primary3Color: Colors.lightBlack,
-        accent1Color: Colors.pinkA200,
-        accent2Color: Colors.grey100,
-        accent3Color: Colors.grey500,
-        textColor: Colors.darkBlack,
-        alternateTextColor: Colors.white,
-        canvasColor: Colors.white,
-        borderColor: Colors.grey300,
-        disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3),
-      },
-    }),
-    text: 'Light',
-  },
-  {
-    payload: themes({
-      palette: {
-        primary1Color: Colors.brown500,
-        primary2Color: Colors.brown700,
-        primary3Color: Colors.lightBlack,
-        accent1Color: Colors.deepPurpleA200,
-        accent2Color: Colors.grey100,
-        accent3Color: Colors.grey500,
-        textColor: Colors.darkBlack,
-        alternateTextColor: Colors.white,
-        canvasColor: Colors.white,
-        borderColor: Colors.grey300,
-        disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3),
-      },
-    }),
-    text: 'Dark',
-  },
+  {text: 'Light'},
+  {text: 'Dark'},
 ]
