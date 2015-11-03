@@ -31,7 +31,8 @@ export function updateTheme(name, updated) {
   let action = {
     type: UPDATE_THEME,
   }
-  if (!R.isNil(theme)) {
+  let isntNil = R.complement(R.isNil)
+  if (isntNil(theme)) {
     let newThemes = R.merge(themes, {[name]: updated})
     storage.set(THEMES, newThemes)
     return R.merge(action, {themes: newThemes})
