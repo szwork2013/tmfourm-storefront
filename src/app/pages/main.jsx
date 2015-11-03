@@ -20,6 +20,7 @@ let {desktopKeylineIncrement} = Spacing
   let {shoppingcart, theme} = state
   return {shoppingcart, theme}
 })
+@Radium
 export default class Main extends Component {
   static childContextTypes = {
     muiTheme: PropTypes.object,
@@ -27,14 +28,17 @@ export default class Main extends Component {
 
   render() {
     let {route, history, shoppingcart, theme} = this.props
+    let displayHeader = false
     return (
       <div style={container}>
         <div style={styles.header}>
-          <Header
-            menu={menu(history, shoppingcart)}
-            onMenuChange={this.handleMenuChange}/>
+          {displayHeader &&
+            <Header
+              menu={menu(history, shoppingcart)}
+              onMenuChange={this.handleMenuChange}/>
+          }
         </div>
-        <div style={styles.content}>
+        <div style={[displayHeader && styles.content]}>
           {this.props.children}
         </div>
       </div>
