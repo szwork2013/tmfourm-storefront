@@ -17,10 +17,14 @@ export default class OfferDetail extends Component {
     return (
       <div style={[grid.grid, grid.gridGutters]}>
         <div style={[grid.cell, grid.cellGuttersXl]}>
-          <div>
-            <img src={"//place-hold.it/200/CDDC39/fff&fontsize=24&text=" + offer.name}/>
-            <h1>{offer.name}</h1>
-            <p>{offer.description}</p>
+          <div style={[grid.grid, grid.gridGutters]}>
+            <div style={[grid.cell, grid.cellGutters, grid.u1of6]}>
+              <img style={{width: '100%'}} src={"//place-hold.it/200/CDDC39/fff&fontsize=24&text=" + offer.name}/>
+            </div>
+            <div style={[grid.cell, grid.cellGutters]}>
+              <h1>{offer.name}</h1>
+              <p>{offer.description}</p>
+            </div>
           </div>
 
         </div>
