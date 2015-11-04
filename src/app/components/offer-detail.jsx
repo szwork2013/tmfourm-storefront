@@ -5,6 +5,13 @@ import {
   RaisedButton,
   TextField,
   SelectField,
+  Tabs,
+  Tab,
+  Table,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColum,
 } from 'material-ui'
 
 import {grid} from '../styles'
@@ -26,10 +33,22 @@ export default class OfferDetail extends Component {
               <p>{offer.description}</p>
             </div>
           </div>
-
+          <div>
+            <Tabs>
+              <Tab label="Product Description">
+                <OfferDescription/>
+              </Tab>
+              <Tab label="Product Specification">
+                <DisplayCharacteristics offer={offer}/>
+              </Tab>
+              <Tab label="Customer Ratings">
+                <h3> Under construction....</h3>
+              </Tab>
+            </Tabs>
+          </div>
         </div>
         <div style={[grid.cell, grid.cellGuttersXl, grid.u1of3]}>
-          <Characteristics offer={offer}/>
+          <ConfigurableCharacteristics offer={offer}/>
           <div style={[grid.grid, grid.gridGutters]}>
             <div style={[grid.cell, grid.cellGutters, grid.cellBottom]}>
               <RaisedButton label="Order" primary={true} onClick={onOrder.bind(this, offer)}/>
@@ -44,8 +63,54 @@ export default class OfferDetail extends Component {
   }
 }
 
+let OfferDescription = props => {
+  return (
+    <div>
+      <h3>Offer description from CMS System</h3>
+    </div>
+  )
+}
 
-let Characteristics = props => {
+let DisplayCharacteristics = props => {
+  let {productSpecification} = props.offer
+  let notEmpty = R.both(R.complement(R.isNil), R.complement(R.isEmpty))
+  let renderCharacteristic = ({name, productSpecCharacteristicValue}) => (
+    <TableRow key={name}>
+      <TableRowColum>{name}</TableRowColum>
+      <TableRowColum>
+        {
+          R.compose(
+            R.join(', '),
+            R.map(R.prop('value'))
+          )(productSpecCharacteristicValue)
+        }
+      </TableRowColum>
+    </TableRow>
+  )
+  return (
+    <div>
+      <h3>Display Characteristics</h3>
+      <Table selectable={false}>
+        <TableHeader key={1}>
+          <TableRow key={1}>
+            <TableHeaderColumn key={1}>Name</TableHeaderColumn>
+            <TableHeaderColumn key={2}>Value</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        {
+          R.compose(
+            R.map(renderCharacteristic),
+            R.filter(R.propEq('configurable', false)),
+            R.chain(R.prop('productSpecCharacteristic'))
+          )(productSpecification)
+        }
+      </Table>
+    </div>
+  )
+}
+
+
+let ConfigurableCharacteristics = props => {
   let {productSpecification} = props.offer
   let notEmpty = R.both(R.complement(R.isNil), R.complement(R.isEmpty))
   let renderCharacteristic = R.cond([
