@@ -4,7 +4,7 @@ import combineReducers from 'redux'
 import {
   RESET_FILTERS,
   FETCH_OFFERS,
-  VIEW_OFFER,
+  FETCH_OFFER,
 } from '../actions/offers'
 import {
   REQUEST,
@@ -31,8 +31,16 @@ export function offers(state = {
 }
 
 export function offer(state = null, action) {
-  switch(action.type) {
-    case VIEW_OFFER: return action.offer
+  let {type, status, data} = action
+  switch(type) {
+    case FETCH_OFFER:
+      switch (status) {
+        case REQUEST: return state
+        case SUCCESS: return data
+        case FAILURE: return null
+        default: return state
+
+      }
     default: return state
   }
 }

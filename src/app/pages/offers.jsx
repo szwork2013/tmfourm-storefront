@@ -6,7 +6,7 @@ import {grid, container} from '../styles'
 import OfferFilter from '../components/offer-filter'
 import OfferList from '../components/offer-list'
 import {fetchCategories} from '../actions/categories'
-import {fetchOffers, fetchOffer, viewOffer} from '../actions/offers'
+import {fetchOffers} from '../actions/offers'
 import {oneClickBuy} from '../actions/orders'
 import {addToShoppingcart, loadShoppingcart} from '../actions/shoppingcart'
 
@@ -21,8 +21,8 @@ export default class OffersPage extends Component {
   render() {
     let {offers, categories, dispatch, history, filters, options, message} = this.props
     let handleViewOffer = offer => {
-      dispatch(viewOffer(offer))
-      history.pushState(null, '/offers/detail')
+      let {_id} = offer
+      history.pushState(null, `/offers/detail/${_id}`)
     }
     let handleOrder = offer => {
       dispatch(oneClickBuy(offer))

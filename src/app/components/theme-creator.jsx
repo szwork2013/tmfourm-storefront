@@ -15,34 +15,41 @@ import Themes from '../themes'
 export default class ThemeCreator extends Component {
 
   render() {
-    let {fontFamily, spacing, palette} = Themes()
-    let handleChangedFont = font => console.log(font)
-    let handleChangedSpacing = spacing => console.log(spacing)
-    let handleChangedPalette = platte => console.log(palette)
+    let {fontFamily, spacing, palette, onThemeCreated} = Themes()
+    let handleFontChanged = font => console.log(font)
+    let handleSpacingChanged = spacing => console.log(spacing)
+    let handlePaletteChanged = palette => console.log(palette)
+    let handleButtonClicked = evt => console.log('create theme')
     return (
       <div>
-        <RaisedButton label="Create a New Theme" primary={true}/>
-        <FontEditor fontFamily={fontFamily} onFontChanged={handleChangedFont}/>
-        <SpacingEditor spacing={spacing} onSpacingChanged={handleChangedSpacing}/>
-        <PaletteEditor palette={palette} onPaletteChanged={handleChangedPalette}/>
+        <RaisedButton label="Create a New Theme" primary={true} onClick={handleButtonClicked}/>
+        <FontEditor fontFamily={fontFamily} onFontChanged={handleFontChanged}/>
+        <SpacingEditor spacing={spacing} onSpacingChanged={handleSpacingChanged}/>
+        <PaletteEditor palette={palette} onPaletteChanged={handlePaletteChanged}/>
       </div>
     )
   }
 }
 
-let FontEditor = props => (
-  <div>
-    <h3>Font</h3>
-    <div style={grid.grid}>
-      <div style={grid.cell, grid.u1of6}>
-        <p>Font Family</p>
-      </div>
-      <div style={grid.cell, grid.u1of6}>
-        <TextField defaultValue={props.fontFamily}/>
+let FontEditor = props => {
+  let {fontFamily, onFontChanged} = props
+  let handleChange = evt => console.log(evt)
+  return (
+    <div>
+      <h3>Font</h3>
+      <div style={grid.grid}>
+        <div style={grid.cell, grid.u1of6}>
+          <p>Font Family</p>
+        </div>
+        <div style={grid.cell, grid.u1of6}>
+          <TextField
+            onChange={handleChange}
+            defaultValue={fontFamily}/>
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 let SpacingEditor = props => (
   <div>

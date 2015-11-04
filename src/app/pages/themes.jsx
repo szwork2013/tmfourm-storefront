@@ -15,17 +15,17 @@ export default class ThemesPage extends Component {
     let {themes, theme} = this.props
     return (
       <div>
-        <ThemeApplier onApplyTheme={this.handleApplyTheme} themes={themes}/>
-        <ThemeCreator onCreateTheme={this.handleCreateTheme}/>
+        <ThemeApplier onThemeApplied={this.handleThemeApplied} themes={themes}/>
+        <ThemeCreator onThemeCreated={this.handleThemeCreated}/>
       </div>
     )
   }
 
-  handleCreateTheme = theme => {
+  handleThemeCreated = theme => {
 
   }
 
-  handleApplyTheme = themeName => {
+  handleThemeApplied = themeName => {
     let {dispatch} = this.props
     dispatch(applyTheme(themeName))
   }

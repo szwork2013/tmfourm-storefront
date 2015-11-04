@@ -1,4 +1,4 @@
-import _ from 'ramda'
+import R from 'ramda'
 import fetch from 'isomorphic-fetch'
 
 import storage from '../storage'
@@ -13,14 +13,14 @@ export const [EQ, LIKE, IN, GT, LT, GE, LE] = ['eq', 'like', 'in', 'gt', 'lt', '
 export const [REQUEST, SUCCESS, FAILURE] = ['REQUEST', 'SUCCESS', 'FAILURE']
 export default config => store => next => action => {
   let q = action[Q]
-  if (_.isNil(q)) return next(action)
+  if (R.isNil(q)) return next(action)
   else {
-    let _action = _.merge(action, {}) //clone aciton without symbol
+    let _action = R.merge(action, {}) //clone aciton without symbol
     let processQuery = query => query
       .then(data => {
-        if (!_.isNil(q.cache)) storage.set(q.cache, data)
-        if (!_.isNil(q.onSuccess)) q.onSuccess(data)
-        next(success(_.merge(_action, {data})))
+        if (!R.isNil(q.cache)) storage.set(q.cache, data)
+        if (!R.isNil(q.onSuccess)) q.onSuccess(data)
+        next(success(R.merge(_action, {data})))
       })
       .catch(error => next(failure({message: error.message || error})))
     next(request(_action))
@@ -41,72 +41,80 @@ export default config => store => next => action => {
   }
 }
 
-let withStatus = status => action => _.merge(action, {status})
+let withStatus = status => action => R.merge(action, {status})
 let request = withStatus(REQUEST)
 let success = withStatus(SUCCESS)
 let failure = withStatus(FAILURE)
+
 let paramify = (targetString, params) => {
-  if (_.isEmpty(params)) return targetString
-  else {
-    let [name, value] = _.head(params)
-    let resultString = _.replace(
-      new RegExp(`\:${name}`, 'g'),
-      value,
-      targetString
-    )
-    return paramify(resultString, _.tail(params))
+  let doParamify = (targetString, params) => {
+    if (R.isEmpty(params)) return targetString
+    else {
+      let [name, value] = R.head(params)
+      let resultString = R.replace(
+        new RegExp(`\:${name}`, 'g'),
+        value,
+        targetString
+      )
+      return doParamify(resultString, R.tail(params))
+    }
   }
+  return R.cond([
+    [R.is(Object), params => doParamify(targetString, R.toPairs(params))],
+    [R.isArrayLike, params => doParamify(targetString, params)],
+    [R.T, R.always(targetString)],
+  ])(params)
 }
 
 let url = (q) => {
-  let pathString = _.isNil(q.params) ? q.path : paramify(q.path, q.params)
-  let queryString = _.cond([
+  let pathString = R.isNil(q.params) ? q.path : paramify(q.path, q.params)
+  let queryString = R.cond([
     [
-      _.and(
-        _.complement(_.isNil),
-        _.is(String),
-        _.complement(_.isEmpty)
+      R.and(
+        R.complement(R.isNil),
+        R.is(String),
+        R.complement(R.isEmpty)
       ),
       query => `q=${query}`,
     ],
     [
-      _.isArrayLike,
+      R.isArrayLike,
       query => {
-        let toString = item => _.when(
-          _.isArrayLike,
-          _.join(',')
+        let toString = item => R.when(
+          R.isArrayLike,
+          R.join(',')
         )(item)
-        let toQueryString = queryField => _.compose(
-          _.trim,
+        let toQueryString = queryField => R.compose(
+          R.trim,
           ([name, op, value]) => `${name} ${op} '${value}'`,
-          _.map(toString)
+          R.map(toString)
         )(queryField)
-        let notNilNorEmpty = _.both(
-          _.complement(_.isNil),
-          _.complement(_.isEmpty)
+        let notNilNorEmpty = R.both(
+          R.complement(R.isNil),
+          R.complement(R.isEmpty)
         )
-        let getValue = _.nth(2)
-        return 'q=' + _.compose(
-          _.join(' and '),
-          _.map(toQueryString),
-          _.filter(qi => notNilNorEmpty(getValue(qi)))
+        let getValue = R.nth(2)
+        return 'q=' + R.compose(
+          R.join(' and '),
+          R.map(toQueryString),
+          R.filter(qi => notNilNorEmpty(getValue(qi)))
         )(q.query)
       },
     ],
     [
-      _.T, _.always(''),
+      R.T, R.always(''),
     ],
   ])(q.query)
-  let optionString = _.compose(
-    _.join('&'),
-    _.map(([f, v]) => f + '=' + _.when(_.isArrayLike, _.join(','))(v)),
-    _.toPairs
-  )(_.options || {})
-  if (_.isEmpty(queryString) && _.isEmpty(optionString)) {
+  let optionString = R.compose(
+    R.join('&'),
+    R.map(([f, v]) => f + '=' + R.when(R.isArrayLike, R.join(','))(v)),
+    R.toPairs
+  )(R.options || {})
+  if (R.isEmpty(queryString) && R.isEmpty(optionString)) {
     return q.endpoint + pathString
-  } else if (_.isEmpty(queryString)) {
+  } else if (R.isEmpty(queryString)) {
     return q.endpoint + pathString + '?' + optionString
-  } else if (_.isEmpty(optionString)) {
+  } else if (R.isEmpty(optionString)) {
     return q.endpoint + pathString + '?' + queryString
   } else {
     return q.endpoint + pathString + '?' + queryString + '&' + optionString

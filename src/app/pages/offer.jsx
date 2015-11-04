@@ -16,7 +16,7 @@ import OfferDetail from '../components/offer-detail'
 export default class OfferPage extends Component {
 
   render() {
-    let {offer, dispatch} = this.props
+    let {offer, dispatch, params} = this.props
     let handleOrder = offer => dispatch(createOrder(offer))
     let handleAddToCart = offer => dispatch(addToShoppingcart(offer))
     return (
@@ -31,9 +31,9 @@ export default class OfferPage extends Component {
   }
 
   componentWillMount() {
-    let {dispatch} = this.props
-    let {id} = this.props.params
-    dispatch(fetchOffer(id))
+    let {dispatch, params} = this.props
+    let {_id} = params
+    dispatch(fetchOffer(_id))
     dispatch(loadShoppingcart())
   }
 }

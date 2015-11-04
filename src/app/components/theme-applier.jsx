@@ -9,12 +9,12 @@ import {grid} from '../styles'
 export default class ThemeApplier extends Component {
 
   render() {
-    let {themes, onApplyTheme} = this.props
+    let {themes, onThemeApplied} = this.props
     let menuItems = R.compose(
       R.map(key => ({text: key})),
       R.keys
     )
-    let handleSelectChange = (evt, idx, item) => onApplyTheme(item.text)
+    let handleSelectChanged = (evt, idx, item) => onThemeApplied(item.text)
     return (
       <div style={[grid.grid]}>
         <div style={[grid.cell, grid.u1of6]}>
@@ -22,7 +22,7 @@ export default class ThemeApplier extends Component {
         </div>
         <div style={[grid.cell, grid.u1of6]}>
           <SelectField
-            onChange={handleSelectChange}
+            onChange={handleSelectChanged}
             menuItems={menuItems(themes)}/>
         </div>
       </div>

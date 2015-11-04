@@ -28,7 +28,7 @@ export default class Main extends Component {
 
   render() {
     let {route, history, shoppingcart, theme} = this.props
-    let displayHeader = false
+    let displayHeader = true
     return (
       <div style={container}>
         <div style={styles.header}>
