@@ -21,7 +21,7 @@ import {grid} from '../styles'
 export default class OfferDetail extends Component {
 
   render() {
-    let {offer, onShoppingcartAdded, onOrderPlaced, onCharacteristicChanged} = this.props
+    let {offer, doc, onShoppingcartAdded, onOrderPlaced, onCharacteristicChanged} = this.props
     return (
       <div style={[grid.grid, grid.gridGutters]}>
         <div style={[grid.cell, grid.cellGuttersXl]}>
@@ -37,7 +37,7 @@ export default class OfferDetail extends Component {
           <div>
             <Tabs>
               <Tab label="Product Description">
-                <OfferDescription/>
+                <OfferDescription doc={doc}/>
               </Tab>
               <Tab label="Product Specification">
                 <DisplayCharacteristics offer={offer}/>
@@ -91,9 +91,28 @@ let Price = props => {
 }
 
 let OfferDescription = props => {
+  let {doc} = props
+  console.log(doc)
+  let renderDoc = doc => {
+    let {title, introduction, description} = R.head(doc.items)
+    let htmlDoc = {
+      __html: description,
+    }
+    return (
+      <div>
+        <h4>Title</h4>
+        <p>{title}</p>
+        <h4>Introduction</h4>
+        <p>{introduction}</p>
+        <h4>Description</h4>
+        <p dangerouslySetInnerHTML={htmlDoc}></p>
+      </div>
+    )
+  }
   return (
     <div>
       <h3>Offer description from CMS System</h3>
+      {doc && renderDoc(doc)}
     </div>
   )
 }

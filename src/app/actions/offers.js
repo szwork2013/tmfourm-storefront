@@ -52,3 +52,14 @@ export function changeCharacteristic(offer, name, value) {
     data: offer,
   }
 }
+
+export const FETCH_OFFER_DOCUMENT = 'FETCH_OFFER_DOCUMENT'
+export function fetchOfferDocument(_id, options) {
+  return {
+    type: FETCH_OFFER_DOCUMENT,
+    [Q]: {
+      path: '/Offer',
+      endpoint: config.cms.endpoint,
+    },
+  }
+}

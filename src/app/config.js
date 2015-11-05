@@ -3,6 +3,6 @@ export default {
     endpoint: '//localhost:9000',
   },
   cms: {
-    endpoint: '//localhost:9001',
+    endpoint: '//localhost:9000',
   },
 }

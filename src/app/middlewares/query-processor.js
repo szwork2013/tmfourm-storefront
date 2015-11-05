@@ -59,7 +59,6 @@ let paramify = (targetString, params) => {
       return doParamify(resultString, R.tail(ps))
     }
   }
-  console.log(R.isArrayLike({}))
   return R.cond([
     [R.isArrayLike, params => doParamify(targetString, params)],
     [R.is(Object), params => doParamify(targetString, R.toPairs(params))],

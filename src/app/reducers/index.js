@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
 
-import {offers, offer} from './offers'
+import {offers, offer, doc} from './offers'
 import {orders} from './orders'
 import {shoppingcart} from './shoppingcart'
 import {categories} from './categories'
@@ -14,4 +14,5 @@ export default combineReducers({
   shoppingcart,
   theme,
   themes,
+  doc,
 })

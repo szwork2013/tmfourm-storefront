@@ -5,18 +5,18 @@ import {
 import R from 'ramda'
 import {connect} from 'react-redux'
 
-import {fetchOffer, changeCharacteristic} from '../actions/offers'
+import {fetchOffer, changeCharacteristic, fetchOfferDocument} from '../actions/offers'
 import {oneClickBuy} from '../actions/orders'
 import {addToShoppingcart, loadShoppingcart} from '../actions/shoppingcart'
 import OfferDetail from '../components/offer-detail'
 
 @connect(state => {
-  return {offer: state.offer}
+  return {offer: state.offer, doc: state.doc}
 })
 export default class OfferPage extends Component {
 
   render() {
-    let {offer, dispatch, params, history} = this.props
+    let {offer, doc, dispatch, params, history} = this.props
     let handlePlacedOrder = offer => {
       dispatch(oneClickBuy(offer))
       history.pushState(null, '/orders')
@@ -27,6 +27,7 @@ export default class OfferPage extends Component {
     }
     let renderOffer = offer => <OfferDetail
       offer={offer}
+      doc={doc}
       onCharacteristicChanged={handleChangedCharacteristic}
       onOrderPlaced={handlePlacedOrder}
       onShoppingcartAdded={handleAddedShoppingcart}/>
@@ -46,6 +47,7 @@ export default class OfferPage extends Component {
     let {dispatch, params} = this.props
     let {_id} = params
     dispatch(fetchOffer(_id))
+    dispatch(fetchOfferDocument(_id))
     dispatch(loadShoppingcart())
   }
 }

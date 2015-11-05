@@ -6,6 +6,7 @@ import {
   FETCH_OFFERS,
   FETCH_OFFER,
   CHANGE_CHARACTERISTIC,
+  FETCH_OFFER_DOCUMENT,
 } from '../actions/offers'
 import {
   REQUEST,
@@ -45,5 +46,20 @@ export function offer(state = null, action) {
     case CHANGE_CHARACTERISTIC:
       return R.merge(data, {})
     default: return state
+  }
+}
+
+export function doc(state = null, action) {
+  let {type, status, data} = action
+  switch (type) {
+    case FETCH_OFFER_DOCUMENT:
+      switch (status) {
+        case REQUEST: return state
+        case SUCCESS: return data
+        case FAILURE: return null
+        default: return state
+      }
+    default: return state
+
   }
 }
