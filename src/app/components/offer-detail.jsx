@@ -21,7 +21,7 @@ import {grid} from '../styles'
 export default class OfferDetail extends Component {
 
   render() {
-    let {offer, onAddToCart, onOrder, onCharacteristicChanged} = this.props
+    let {offer, onShoppingcartAdded, onOrderPlaced, onCharacteristicChanged} = this.props
     return (
       <div style={[grid.grid, grid.gridGutters]}>
         <div style={[grid.cell, grid.cellGuttersXl]}>
@@ -57,10 +57,10 @@ export default class OfferDetail extends Component {
           <hr/>
           <div style={[grid.grid]}>
             <div style={[grid.cell, grid.cellBottom]}>
-              <RaisedButton label={`Order ${offer.name}`} primary={true} onClick={onOrder.bind(this, offer)}/>
+              <RaisedButton label={`Order ${offer.name}`} primary={true} onClick={onOrderPlaced.bind(this, offer)}/>
             </div>
             <div style={[grid.cell]}>
-              <RaisedButton label="Add to shopping cart" onClick={onAddToCart.bind(this, offer)}/>
+              <RaisedButton label="Add to shopping cart" onClick={onShoppingcartAdded.bind(this, offer)}/>
             </div>
           </div>
         </div>

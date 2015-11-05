@@ -6,7 +6,7 @@ import R from 'ramda'
 import {connect} from 'react-redux'
 
 import {fetchOffer, changeCharacteristic} from '../actions/offers'
-import {createOrder} from '../actions/orders'
+import {oneClickBuy} from '../actions/orders'
 import {addToShoppingcart, loadShoppingcart} from '../actions/shoppingcart'
 import OfferDetail from '../components/offer-detail'
 
@@ -16,22 +16,27 @@ import OfferDetail from '../components/offer-detail'
 export default class OfferPage extends Component {
 
   render() {
-    let {offer, dispatch, params} = this.props
-    let handleOrder = offer => dispatch(createOrder(offer))
-    let handleAddToCart = offer => dispatch(addToShoppingcart(offer))
+    let {offer, dispatch, params, history} = this.props
+    let handlePlacedOrder = offer => {
+      dispatch(oneClickBuy(offer))
+      history.pushState(null, '/orders')
+    }
+    let handleAddedShoppingcart = offer => dispatch(addToShoppingcart(offer))
     let handleChangedCharacteristic = (offer, name, value) => {
       dispatch(changeCharacteristic(offer, name, value))
     }
+    let renderOffer = offer => <OfferDetail
+      offer={offer}
+      onCharacteristicChanged={handleChangedCharacteristic}
+      onOrderPlaced={handlePlacedOrder}
+      onShoppingcartAdded={handleAddedShoppingcart}/>
     return (
         <div>
           {
-            R.isNil(offer)
-              ? loadingIndicator(100)
-              : <OfferDetail
-                offer={offer}
-                onCharacteristicChanged={handleChangedCharacteristic}
-                onOrder={handleOrder}
-                onAddToCart={handleAddToCart}/>
+            R.cond([
+              [R.complement(R.isNil), renderOffer],
+              [R.T, R.always(loadingIndicator(100))],
+            ])(offer)
           }
         </div>
     )

@@ -47,21 +47,22 @@ let success = withStatus(SUCCESS)
 let failure = withStatus(FAILURE)
 
 let paramify = (targetString, params) => {
-  let doParamify = (targetString, params) => {
-    if (R.isEmpty(params)) return targetString
+  let doParamify = (ts, ps) => {
+    if (R.isEmpty(ps)) return ts
     else {
-      let [name, value] = R.head(params)
+      let [name, value] = R.head(ps)
       let resultString = R.replace(
         new RegExp(`\:${name}`, 'g'),
         value,
-        targetString
+        ts
       )
-      return doParamify(resultString, R.tail(params))
+      return doParamify(resultString, R.tail(ps))
     }
   }
+  console.log(R.isArrayLike({}))
   return R.cond([
-    [R.is(Object), params => doParamify(targetString, R.toPairs(params))],
     [R.isArrayLike, params => doParamify(targetString, params)],
+    [R.is(Object), params => doParamify(targetString, R.toPairs(params))],
     [R.T, R.always(targetString)],
   ])(params)
 }
