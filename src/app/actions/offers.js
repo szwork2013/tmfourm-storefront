@@ -1,3 +1,4 @@
+import R from 'ramda'
 import {
   Q,
   GET,
@@ -37,5 +38,17 @@ export function fetchOffer(_id, options) {
       endpoint,
       options,
     },
+  }
+}
+
+export const CHANGE_CHARACTERISTIC = 'CHANGE_CHARACTERISTIC'
+export function changeCharacteristic(offer, name, value) {
+  //TODO hard code price change, should be changed later
+  R.forEach(({price}) => {
+    price.dutyFreeAmount = 100 + 10 * Math.floor(Math.random() * 5)
+  }, offer.produtOfferingPrice)
+  return {
+    type: CHANGE_CHARACTERISTIC,
+    data: offer,
   }
 }

@@ -5,6 +5,7 @@ import {
   RESET_FILTERS,
   FETCH_OFFERS,
   FETCH_OFFER,
+  CHANGE_CHARACTERISTIC,
 } from '../actions/offers'
 import {
   REQUEST,
@@ -41,6 +42,8 @@ export function offer(state = null, action) {
         default: return state
 
       }
+    case CHANGE_CHARACTERISTIC:
+      return R.merge(data, {})
     default: return state
   }
 }

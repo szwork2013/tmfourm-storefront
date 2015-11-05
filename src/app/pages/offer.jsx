@@ -5,7 +5,7 @@ import {
 import R from 'ramda'
 import {connect} from 'react-redux'
 
-import {fetchOffer} from '../actions/offers'
+import {fetchOffer, changeCharacteristic} from '../actions/offers'
 import {createOrder} from '../actions/orders'
 import {addToShoppingcart, loadShoppingcart} from '../actions/shoppingcart'
 import OfferDetail from '../components/offer-detail'
@@ -19,12 +19,19 @@ export default class OfferPage extends Component {
     let {offer, dispatch, params} = this.props
     let handleOrder = offer => dispatch(createOrder(offer))
     let handleAddToCart = offer => dispatch(addToShoppingcart(offer))
+    let handleChangedCharacteristic = (offer, name, value) => {
+      dispatch(changeCharacteristic(offer, name, value))
+    }
     return (
         <div>
           {
             R.isNil(offer)
               ? loadingIndicator(100)
-              : <OfferDetail offer={offer} onOrder={handleOrder} onAddToCart={handleAddToCart}/>
+              : <OfferDetail
+                offer={offer}
+                onCharacteristicChanged={handleChangedCharacteristic}
+                onOrder={handleOrder}
+                onAddToCart={handleAddToCart}/>
           }
         </div>
     )
